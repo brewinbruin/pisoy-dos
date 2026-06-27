@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Pisoy Dos</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ===== LANDING — choose action ===== -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-bg">
+      <div class="felt-texture"></div>
+      <div class="landing-content">
+        <div class="logo">
+          <span class="suit red">♦</span>
+          <h1>Pisoy Dos</h1>
+          <span class="suit black">♣</span>
+        </div>
+        <p class="tagline">The Filipino shedding card game</p>
+        <div class="landing-actions">
+          <button class="btn-primary" id="btn-go-create">Create Room</button>
+          <button class="btn-secondary" id="btn-go-join">Join Room</button>
+        </div>
+        <div class="hmr-credit">
+          <img src="/logo.png" alt="HMR Consilium" class="hmr-logo" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CREATE — enter name ===== -->
+  <div id="screen-create" class="screen">
+    <div class="landing-bg">
+      <div class="felt-texture"></div>
+      <div class="entry-content">
+        <button class="btn-back" id="btn-back-create">← Back</button>
+        <div class="entry-card">
+          <h2>Create a Room</h2>
+          <p class="entry-hint">Enter your name to get started</p>
+          <label class="field-label" for="create-name">Your name</label>
+          <input type="text" id="create-name" placeholder="e.g. Kuya Jun"
+            maxlength="16" autocomplete="off" autocorrect="off"
+            autocapitalize="words" spellcheck="false" inputmode="text" />
+          <button class="btn-primary" id="btn-create">Create Room</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== JOIN — enter code then name ===== -->
+  <div id="screen-join" class="screen">
+    <div class="landing-bg">
+      <div class="felt-texture"></div>
+      <div class="entry-content">
+        <button class="btn-back" id="btn-back-join">← Back</button>
+        <div class="entry-card">
+          <h2>Join a Room</h2>
+          <label class="field-label" for="join-code">Room code</label>
+          <input type="text" id="join-code"
+            placeholder="A B C D"
+            maxlength="4"
+            autocomplete="off" autocorrect="off"
+            autocapitalize="characters" spellcheck="false"
+            inputmode="text" />
+          <label class="field-label" for="join-name">Your name</label>
+          <input type="text" id="join-name"
+            placeholder="e.g. Ate Maria"
+            maxlength="16"
+            autocomplete="off" autocorrect="off"
+            autocapitalize="words" spellcheck="false"
+            inputmode="text" />
+          <button class="btn-primary" id="btn-join">Join Room</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EXTRA CARD REVEAL (3-player only) ===== -->
+  <div id="screen-reveal" class="screen">
+    <div class="landing-bg">
+      <div class="felt-texture"></div>
+      <div class="reveal-content">
+        <h2>Last Card Revealed</h2>
+        <p class="reveal-subtitle">This card goes to the holder of <strong>3♣</strong></p>
+        <div class="reveal-card-wrap" id="reveal-card-wrap"></div>
+        <div class="reveal-waiting" id="reveal-waiting"></div>
+        <button class="btn-primary" id="btn-saw-card">✓ I saw it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LOBBY ===== -->
+  <div id="screen-lobby" class="screen">
+    <div class="felt-texture"></div>
+    <div class="lobby-content">
+      <div class="room-header">
+        <h2>Room <span id="lobby-code" class="code-badge"></span></h2>
+        <button class="btn-icon" id="btn-copy-code" title="Copy code">📋</button>
+      </div>
+      <div class="player-list" id="lobby-players"></div>
+      <p class="lobby-hint" id="lobby-hint">Waiting for players… (2–4 needed)</p>
+      <button class="btn-primary hidden" id="btn-start">Start Game</button>
+      <button class="btn-secondary" id="btn-leave-room">Leave Room</button>
+      <div class="extra-card-notice hidden" id="extra-card-notice"></div>
+    </div>
+  </div>
+
+  <!-- ===== GAME ===== -->
+  <div id="screen-game" class="screen">
+    <div class="felt-texture"></div>
+
+    <!-- Top bar with quit + chat always visible, never overlapping -->
+    <div class="game-top-bar">
+      <button class="btn-quit-top" id="btn-quit">✕ Quit</button>
+      <div class="game-top-spacer"></div>
+      <button class="chat-toggle-top" id="chat-toggle">💬 Chat</button>
+    </div>
+
+    <div id="opponents-area" class="opponents-area"></div>
+
+    <div class="table-center">
+      <div class="played-area" id="played-area">
+        <span class="played-label" id="played-label">Waiting for first play…</span>
+        <div class="played-cards" id="played-cards"></div>
+      </div>
+      <div class="table-actions">
+        <button class="btn-play" id="btn-play-cards" disabled>Play</button>
+        <button class="btn-pass" id="btn-pass" disabled>Pass</button>
+      </div>
+      <div class="status-bar" id="status-bar"></div>
+      <div class="draw-pile-counter hidden" id="draw-pile-counter">
+        🂠 <span id="draw-pile-count">0</span> cards left to draw
+      </div>
+
+      <!-- Last plays history -->
+      <div class="history-toggle-row">
+        <button class="btn-history" id="btn-history">🕐 Last plays</button>
+      </div>
+      <div class="history-panel hidden" id="history-panel">
+        <div class="history-entries" id="history-entries"></div>
+      </div>
+    </div>
+
+    <div class="my-hand-wrap">
+      <div class="my-info">
+        <span id="my-name-label"></span>
+        <button class="btn-sort" id="btn-sort">⇅ Sort</button>
+        <span class="card-count" id="my-card-count"></span>
+      </div>
+      <!-- 3 staging rows for combo building -->
+      <div class="staging-area" id="staging-area">
+        <div class="stage-row row-drop-target" id="stage-row-1" data-row="s1"></div>
+        <div class="stage-row row-drop-target" id="stage-row-2" data-row="s2"></div>
+        <div class="stage-row row-drop-target" id="stage-row-3" data-row="s3"></div>
+      </div>
+      <!-- 1 hand row (fan overlap) — permanent element, listeners attached once -->
+      <div class="my-hand" id="my-hand">
+        <div class="row-drop-target hand-row fan-row" id="hand-row" data-row="h1"></div>
+      </div>
+    </div>
+
+    <!-- Drawn card modal (2-player) -->
+    <div class="drawn-modal hidden" id="drawn-modal">
+      <div class="drawn-modal-card">
+        <div class="drawn-label">You drew!</div>
+        <div id="drawn-card-display"></div>
+        <button class="btn-primary" id="btn-drawn-ok">Add to Hand</button>
+      </div>
+    </div>
+
+    <div class="chat-panel hidden" id="chat-panel">
+      <div class="chat-header">
+        <span>Chat</span>
+        <button class="btn-close" id="chat-close">✕</button>
+      </div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="Message…" maxlength="200"
+          autocomplete="off" autocorrect="off" spellcheck="false" />
+        <button id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS ===== -->
+  <div id="screen-results" class="screen">
+    <div class="felt-texture"></div>
+    <div class="results-content">
+      <h2>Game Over</h2>
+      <div class="placements" id="placements-list"></div>
+      <button class="btn-primary" id="btn-play-again">🔄 Play Again</button>
+      <button class="btn-secondary hidden" id="btn-host-restart">Start Now (host)</button>
+      <p class="play-again-hint">Everyone taps Play Again to auto-start</p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
